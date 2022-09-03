@@ -1,0 +1,35 @@
+{
+    "name": "dimtrov/sysinfo",
+    "description": "A lightweight tool to retrieve informations about your PHP environment",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dimitri Sitchet Tomkeu",
+            "email": "devcode.dst@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Dimtrov\\Sysinfo\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=7.4"
+    },
+    "require-dev": {
+        "blitz-php/coding-standard": "^1.0",
+        "phpstan/phpstan": "^1.8"
+    },
+    "scripts": {
+        "analyze": "phpstan analyse",
+        "cs": [
+            "php-cs-fixer fix --ansi --verbose --dry-run --diff"
+        ],
+        "cs-fix": [
+            "php-cs-fixer fix --ansi --verbose --diff"
+        ]
+    }
+}
