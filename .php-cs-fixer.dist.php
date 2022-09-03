@@ -12,19 +12,13 @@
 use BlitzPHP\CodingStandard\Blitz;
 use Nexus\CsConfig\Factory;
 use Nexus\CsConfig\Fixer\Comment\NoCodeSeparatorCommentFixer;
-use Nexus\CsConfig\Fixer\Comment\SpaceAfterCommentStartFixer;
 use Nexus\CsConfig\FixerGenerator;
 use PhpCsFixer\Finder;
 
 $finder = Finder::create()
     ->files()
-    ->in([
-        __DIR__ . '/src',
-    ])
-    ->notName('#Foobar.php$#')
-    ->append([
-        __FILE__,
-    ]);
+    ->in([__DIR__ . '/src'])
+    ->append([__FILE__]);
 
 $overrides = [];
 
@@ -34,7 +28,6 @@ $options = [
     'customFixers' => FixerGenerator::create('vendor/nexusphp/cs-config/src/Fixer', 'Nexus\\CsConfig\\Fixer'),
     'customRules'  => [
         NoCodeSeparatorCommentFixer::name() => true,
-        SpaceAfterCommentStartFixer::name() => true,
     ],
 ];
 

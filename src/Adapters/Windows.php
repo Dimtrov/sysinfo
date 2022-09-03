@@ -100,9 +100,7 @@ class Windows extends BaseAdapter
 
         $drives = explode(' ', str_ireplace(['Drives: ', 'Lecteurs'], '', $drives));
 
-        $partitions = array_filter($drives, function($drive) {
-            return is_dir($drive); 
-        });
+        $partitions = array_filter($drives, static fn ($drive) => is_dir($drive));
 
         return $partitions;
     }
@@ -134,9 +132,7 @@ class Windows extends BaseAdapter
 
         $list = explode(' ', $ram);
 
-        return array_map(function($v) use($format) {
-            return $format ? $this->byte2size((int) $v) : $v;
-        }, $list);
+        return array_map(fn ($v) => $format ? $this->byte2size((int) $v) : $v, $list);
     }
 
     /**

@@ -66,7 +66,7 @@ abstract class BaseAdapter
 
     /**
      * List the different memory bar
-     * 
+     *
      * @return array<int|string> * @return int|string if $format set to true, return an array of string like `['2GB', '4GB']` otherwise, return an array of raw value in bytes like `[2000000, 40000]`
      */
     abstract public function ramList(bool $format = true): array;
@@ -113,7 +113,7 @@ abstract class BaseAdapter
 
     /**
      * Determine the storage capacity of each partition on the hard drive
-     * 
+     *
      * @return array<int|string> if $format set to true, return an array of string like `['2GB', '4GB']` otherwise, return an array of raw value in bytes like `[2000000, 40000]`
      */
     public function diskPartitionsSpaces(bool $format = true): array
