@@ -58,6 +58,11 @@ abstract class BaseAdapter
     abstract public function diskPartitions(): array;
 
     /**
+     * Get OS Release
+     */
+    abstract public function osRelease(): string;
+
+    /**
      * Retrieve the free ram resources.
      *
      * @return int|string if $format set to true, return a string like `'2GB'` otherwise, return a raw value in bytes like `2000000`

@@ -92,6 +92,14 @@ class Mac extends BaseAdapter
     /**
      * {@inheritDoc}
      */
+    public function osRelease(): string
+    {
+        return trim(shell_exec('uname -rs'));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function ramFree(bool $format = true)
     {
         $ram = 1024 * (int) shell_exec("ps -caxm -orss= | awk '{ sum += $1 } END { print sum }'"); // KB

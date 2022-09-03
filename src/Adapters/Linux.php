@@ -128,6 +128,14 @@ class Linux extends BaseAdapter
     /**
      * {@inheritDoc}
      */
+    public function osRelease(): string
+    {
+        return @parse_ini_file('/etc/os-release')['PRETTY_NAME'];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function ramFree(bool $format = true)
     {
         $ram = 1024 * (int) $this->ram_resources[2];

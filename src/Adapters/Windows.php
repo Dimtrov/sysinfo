@@ -108,6 +108,16 @@ class Windows extends BaseAdapter
     /**
      * {@inheritDoc}
      */
+    public function osRelease(): string
+    {
+        $wmic = explode(PHP_EOL, shell_exec('wmic OS get Caption'));
+
+        return $wmic[1] ?? null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function ramFree(bool $format = true)
     {
         $ram = shell_exec('wmic OS get FreePhysicalMemory /Value');
