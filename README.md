@@ -1,10 +1,10 @@
 # dimtrov/sysinfo (PHP System Informations)
 ### A lightweight tool to retrieve informations about your PHP environment
 
-[![Coding Standards](https://github.com/Dimtrov/sysinfo/actions/workflows/test-sysinfos.yml/badge.svg)](https://github.com/Dimtrov/sysinfo/actions/workflows/test-sysinfos.yml)
+[![Coding Standards](https://github.com/Dimtrov/sysinfo/actions/workflows/test-coding-standards.yml/badge.svg)](https://github.com/Dimtrov/sysinfo/actions/workflows/test-coding-standards.yml)
 [![PHPStan Static Analysis](https://github.com/Dimtrov/sysinfo/actions/workflows/test-phpstan.yml/badge.svg)](https://github.com/Dimtrov/sysinfo/actions/workflows/test-phpstan.yml)
 [![PHPStan level](https://img.shields.io/badge/PHPStan-max%20level-brightgreen)](phpstan.neon.dist)
-[![Coverage Status](https://coveralls.io/repos/github/Dimtrov/sysinfo/badge.svg?branch=develop)](https://coveralls.io/github/Dimtrov/sysinfo?branch=develop)
+[![Coverage Status](https://coveralls.io/repos/github/Dimtrov/sysinfo/badge.svg?branch=main)](https://coveralls.io/github/Dimtrov/sysinfo?branch=main)
 [![Latest Stable Version](http://poser.pugx.org/Dimtrov/sysinfo/v)](https://packagist.org/packages/Dimtrov/sysinfo)
 [![License](https://img.shields.io/github/license/Dimtrov/sysinfo)](LICENSE)
 [![Total Downloads](http://poser.pugx.org/Dimtrov/sysinfo/downloads)](https://packagist.org/packages/Dimtrov/sysinfo)
@@ -65,6 +65,7 @@ $sysinfo->kernel(); //
 $sysinfo->memoryLimit(); // 8 MB
 $sysinfo->memoryUsage(); // 2.3 MB
 $sysinfo->os(); // Windows
+$sysinfo->osRelease(); // Microsoft Windows 11 Pro
 
 $sysinfo->ramCount(); // 2
 $sysinfo->ramFree();  // 1.3 GB
@@ -224,6 +225,11 @@ public function memoryUsage(bool $format = true);
  * Get the Os
  */
 public function os(): string;
+
+/**
+ * Get the Os release
+ */
+public function osRelease(): string;
 
 /**
  * Count the number of memory bars available
