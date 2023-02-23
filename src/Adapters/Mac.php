@@ -102,8 +102,8 @@ class Mac extends BaseAdapter
             parent::ipsAddress(),
             $this->findIps('/sbin/ifconfig', 'inet ')
         );
-        
-        return array_unique(array_filter($ips, function ($ip) { return !empty($ip); }));
+
+        return array_unique(array_filter($ips, static fn ($ip) => ! empty($ip)));
     }
 
     /**

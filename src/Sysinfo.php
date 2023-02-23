@@ -18,41 +18,6 @@ use Dimtrov\Sysinfo\Adapters\Mac;
 use Dimtrov\Sysinfo\Adapters\Windows;
 
 /**
- * @method string            cpuArchitecture()
- * @method int               cpuCores()
- * @method int               cpuFree()
- * @method int|string        cpuFrequency(bool $format = true)
- * @method string            cpuName()
- * @method int               cpuProcessors()
- * @method int|string        cpuSpeed(bool $format = true)
- * @method string            cpuVendor()
- * @method int|string        diskCapacity(bool $format = true)
- * @method int               diskCountPartitions()
- * @method int|string        diskFree(bool $format = true, string $partition = '/')
- * @method array             diskPartitions()
- * @method array<string,     int|string> diskPartitionsSpaces(bool $format = true, bool $onlytotalspace = true)
- * @method int|string        diskTotal(bool $format = true, string $partition = '/')
- * @method int|string        diskUsed(bool $format = true, string $partition = '/')
- * @method int|string        diskUsedPercentage(bool $format = true, string $partition = '/')
- * @method int|string        diskUsedPercentage(bool $format = true, string $partition = '/')
- * @method int               executionTimeLimit()
- * @method string            hostname()
- * @method string            ipAddress()
- * @method string[]          ipsAddress()
- * @method string            kernel()
- * @method ?string           macAddress()
- * @method int|string        memoryLimit(bool $format = true)
- * @method int|string        memoryUsage(bool $format = true)
- * @method string            os()
- * @method string            osRelease()
- * @method int               ramCount()
- * @method int|string        ramFree(bool $format = true)
- * @method int|string        ramFreePercentage(bool $format = true)
- * @method array<int|string> ramList(bool $format = true)
- * @method int|string        ramTotal(bool $format = true)
- * @method int|string        ramUsed(bool $format = true)
- * @method int|string        ramUsedPercentage(bool $format = true)
- * 
  * @method static string            cpuArchitecture()
  * @method static int               cpuCores()
  * @method static int               cpuFree()
@@ -110,10 +75,10 @@ class Sysinfo
 
     /**
      * Self instance for singletton
-     * 
+     *
      * @var self
      */
-    private static $_instance = null;
+    private static $_instance;
 
     public function __construct()
     {
@@ -137,7 +102,7 @@ class Sysinfo
     public static function instance(): self
     {
         if (! (self::$_instance instanceof self)) {
-            self::$_instance = new self;
+            self::$_instance = new self();
         }
 
         return self::$_instance;
@@ -151,11 +116,11 @@ class Sysinfo
         $options = array_merge([
             'format'         => true,
             'partition'      => '/',
-            'onlytotalspace' => true
+            'onlytotalspace' => true,
         ], $options);
 
         /**
-         * @var array<string, array<string, string|int|null|string[]>>
+         * @var array<string, array<string, int|string|string[]|null>>
          */
         $informations = [
             'computer' => self::computer(),
@@ -210,7 +175,6 @@ class Sysinfo
             'cores'        => $adapter->cpuCores(),
             'free'         => $adapter->cpuFree(),
             'frequency'    => $adapter->cpuFrequency($format),
-            'name'         => $adapter->cpuName(),
             'name'         => $adapter->cpuName(),
             'processors'   => $adapter->cpuProcessors(),
             'speed'        => $adapter->cpuSpeed($format),

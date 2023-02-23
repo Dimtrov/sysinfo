@@ -61,7 +61,7 @@ abstract class BaseAdapter
      * Get Mac Address
      */
     abstract public function macAddress(): ?string;
-    
+
     /**
      * Get OS Release
      */
@@ -135,8 +135,7 @@ abstract class BaseAdapter
 
         return $format ? number_format($percentage, 0, '.', '') . '%' : $percentage;
     }
-    
-    
+
     /**
      * Determine the storage capacity of each partition on the hard drive
      *
@@ -149,8 +148,7 @@ abstract class BaseAdapter
         foreach ($partitions as $key => $value) {
             if ($onlytotalspace) {
                 $partitions[$value] = $this->diskTotal($format, $value);
-            }
-            else {
+            } else {
                 $partitions[$value] = [
                     'free'           => $this->diskFree($format, $value),
                     'freePercentage' => $this->diskFreePercentage($format, $value),
@@ -243,9 +241,9 @@ abstract class BaseAdapter
      */
     public function ipsAddress(): array
     {
-        $ips = ['127.0.0.1'];
+        $ips = [];
 
-        $ip = $_SERVER["SERVER_ADDR"] ?? '';
+        $ip = $_SERVER['SERVER_ADDR'] ?? '';
         if (empty($ip) || $ip === '::1') {
             $ip = gethostname();
             if ($ip) {
@@ -256,19 +254,18 @@ abstract class BaseAdapter
         }
         $ips[] = $ip;
 
-
-        if (!empty($_SERVER['SERVER_ADDR'])) {
+        if (! empty($_SERVER['SERVER_ADDR'])) {
             $addr = gethostbyaddr($_SERVER['SERVER_ADDR']);
-            if ($addr){
+            if ($addr) {
                 $ips[] = gethostbyname($addr);
             }
         }
 
-        if (!empty($_SERVER['SERVER_NAME'])) {
+        if (! empty($_SERVER['SERVER_NAME'])) {
             $ips[] = gethostbyname($_SERVER['SERVER_NAME']);
         }
-        
-        return array_unique(array_filter($ips, function ($ip) { return !empty($ip); }));
+
+        return array_unique(array_filter($ips, static fn ($ip) => ! empty($ip)));
     }
 
     /**
@@ -369,7 +366,7 @@ abstract class BaseAdapter
     public function ramUsedPercentage(bool $format = true)
     {
         $total = $this->ramTotal(false);
-        $free = $this->ramFree(false);
+        $free  = $this->ramFree(false);
 
         $percentage = ($total - $free) / $total * 100;
 
