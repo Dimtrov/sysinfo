@@ -11,8 +11,12 @@
 
 namespace Dimtrov\Sysinfo\Adapters;
 
+use Dimtrov\Sysinfo\Traits\LinuxMac;
+
 class Linux extends BaseAdapter
 {
+    use LinuxMac;
+
     /**
      * Contains all the memory stats from 'free'.
      *
@@ -123,6 +127,19 @@ class Linux extends BaseAdapter
         // @todo implement
 
         return [0];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function ipsAddress(): array
+    {
+        $ips = array_merge(
+            parent::ipsAddress(),
+            $this->findIps('/sbin/ifconfig', 'inet addr:')
+        );
+        
+        return array_unique(array_filter($ips, function ($ip) { return !empty($ip); }));
     }
 
     /**

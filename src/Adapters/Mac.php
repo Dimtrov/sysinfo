@@ -11,8 +11,12 @@
 
 namespace Dimtrov\Sysinfo\Adapters;
 
+use Dimtrov\Sysinfo\Traits\LinuxMac;
+
 class Mac extends BaseAdapter
 {
+    use LinuxMac;
+
     /**
      * {@inheritDoc}
      */
@@ -87,6 +91,19 @@ class Mac extends BaseAdapter
         // @todo implement
 
         return [0];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function ipsAddress(): array
+    {
+        $ips = array_merge(
+            parent::ipsAddress(),
+            $this->findIps('/sbin/ifconfig', 'inet ')
+        );
+        
+        return array_unique(array_filter($ips, function ($ip) { return !empty($ip); }));
     }
 
     /**

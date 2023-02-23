@@ -191,6 +191,55 @@ abstract class BaseAdapter
     }
 
     /**
+     * Get the specified position IP address
+     */
+    public function ipAddress(int $position = 0): string
+    {
+        $ips = $this->ipsAddress();
+
+        if (isset($ips[$position])) {
+            return $ips[$position];
+        }
+
+        return $ips[0] ?? '127.0.0.1';
+    }
+
+    /**
+     * Get all the IPs address
+     *
+     * @return string[]
+     */
+    public function ipsAddress(): array
+    {
+        $ips = ['127.0.0.1'];
+
+        $ip = $_SERVER["SERVER_ADDR"] ?? '';
+        if (empty($ip) || $ip === '::1') {
+            $ip = gethostname();
+            if ($ip) {
+                $ip = gethostbyname($ip);
+            } else {
+                $ip = $_SESSION['HTTP_HOST'] ?? '127.0.0.1';
+            }
+        }
+        $ips[] = $ip;
+
+
+        if (!empty($_SERVER['SERVER_ADDR'])) {
+            $addr = gethostbyaddr($_SERVER['SERVER_ADDR']);
+            if ($addr){
+                $ips[] = gethostbyname($addr);
+            }
+        }
+
+        if (!empty($_SERVER['SERVER_NAME'])) {
+            $ips[] = gethostbyname($_SERVER['SERVER_NAME']);
+        }
+        
+        return array_unique(array_filter($ips, function ($ip) { return !empty($ip); }));
+    }
+
+    /**
      * Get the OS kernel
      */
     public function kernel(): string
