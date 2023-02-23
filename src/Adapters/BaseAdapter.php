@@ -58,6 +58,11 @@ abstract class BaseAdapter
     abstract public function diskPartitions(): array;
 
     /**
+     * Get Mac Address
+     */
+    abstract public function macAddress(): ?string;
+    
+    /**
      * Get OS Release
      */
     abstract public function osRelease(): string;

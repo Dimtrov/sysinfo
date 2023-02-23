@@ -109,6 +109,14 @@ class Mac extends BaseAdapter
     /**
      * {@inheritDoc}
      */
+    public function macAddress(): ?string
+    {
+        return $this->findMacAddress('/sbin/ifconfig', 'ether');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function osRelease(): string
     {
         return trim(shell_exec('uname -rs'));

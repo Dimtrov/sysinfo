@@ -105,6 +105,37 @@ class Windows extends BaseAdapter
         return $partitions;
     }
 
+    public function macAddress(): ?string
+    {
+        // this windows version works on xp running apache
+        // based server. it has not been tested with anything
+        // else, however it should work with NT, and 2000 also
+        // execute the ipconfig
+        @exec('ipconfig/all', $lines);
+        // count number of lines, if none returned return MAC_404
+        // thanks go to Gert-Rainer Bitterlich <bitterlich -at- ima-dresden -dot- de>
+        if (count($lines) === 0) {
+                return null;
+        }
+        // $path the lines together
+        $conf = implode(PHP_EOL, $lines);
+            
+        $lines = explode(PHP_EOL, $conf);
+        foreach ($lines as $key => $line) {
+            // check for the mac signature in the line
+            // originally the check was checking for the existence of string 'physical address'
+            // however Gert-Rainer Bitterlich pointed out this was for english language
+            // based servers only. preg_match updated by Gert-Rainer Bitterlich. Thanks
+            if (preg_match("/([0-9a-f][0-9a-f][-:]){5}([0-9a-f][0-9a-f])/i", $line)) {
+                $trimmedLine = trim($line);
+                // take of the mac addres and return
+                return trim(substr($trimmedLine, strrpos($trimmedLine, " ")));
+            }
+        }
+
+        return null;
+    }
+    
     /**
      * {@inheritDoc}
      */

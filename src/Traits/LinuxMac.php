@@ -14,13 +14,10 @@ trait LinuxMac
     {
         $ips = [];
 
-        $fp = @popen($conffile, 'rb');
-        if (!$fp) {
+        $conf = $this->getConfig($conffile);
+        if (null === $conf) {
             return $ips;
         }
-        
-        $conf = @fread($fp, 4096);
-        @pclose($fp);
 
         $lines = explode(PHP_EOL, $conf);
         
@@ -36,5 +33,43 @@ trait LinuxMac
         }
         
         return array_filter($ips, function ($ip) { return !empty($ip); });
+    }
+
+    /**
+     * Find mac addresse
+     */
+    private function findMacAddress(string $conffile, string $delimiter): ?string
+    {
+        $conf = $this->getConfig($conffile);
+        if (null === $conf) {
+            return null;
+        }
+
+        $pos = strpos($conf, $delimiter);
+        if ($pos) {
+            // seperate out the mac address
+            $str = trim(substr($conf, ($pos + strlen($delimiter))));
+
+            return trim(substr($str, 0, strpos($str, "\n")));
+        }
+
+        return null;
+    }
+
+
+    private function getConfig(string $file): ?string
+    {        
+        $fp = @popen($file, "rb");
+        if (!$fp) {
+            return null;
+        }
+
+        $conf = @fread($fp, 4096);
+        if (!$conf) {
+            return null;
+        }
+        @pclose($fp);
+
+        return $conf;
     }
 }

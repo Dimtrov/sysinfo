@@ -145,6 +145,14 @@ class Linux extends BaseAdapter
     /**
      * {@inheritDoc}
      */
+    public function macAddress(): ?string
+    {
+        return $this->findMacAddress('/sbin/ifconfig', 'HWaddr');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function osRelease(): string
     {
         return @parse_ini_file('/etc/os-release')['PRETTY_NAME'];
