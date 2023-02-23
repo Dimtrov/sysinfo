@@ -48,6 +48,37 @@ use Dimtrov\Sysinfo\Adapters\Windows;
  * @method array<int|string> ramList(bool $format = true)
  * @method int|string        ramTotal(bool $format = true)
  * @method int|string        ramUsedPercentage(bool $format = true)
+ * 
+ * @method static string            cpuArchitecture()
+ * @method static int               cpuCores()
+ * @method static int               cpuFree()
+ * @method static int|string        cpuFrequency(bool $format = true)
+ * @method static string            cpuName()
+ * @method static int               cpuProcessors()
+ * @method static int|string        cpuSpeed(bool $format = true)
+ * @method static string            cpuVendor()
+ * @method static int|string        diskCapacity(bool $format = true)
+ * @method static int               diskCountPartitions()
+ * @method static int|string        diskFree(bool $format = true, string $partition = '/')
+ * @method static array             diskPartitions()
+ * @method static array<string,     int|string> diskPartitionsSpaces(bool $format = true)
+ * @method static int|string        diskTotal(bool $format = true, string $partition = '/')
+ * @method static int|string        diskUsed(bool $format = true, string $partition = '/')
+ * @method static int|string        diskUsedPercentage(bool $format = true, string $partition = '/')
+ * @method static int               executionTimeLimit()
+ * @method static string            hostname()
+ * @method static string            ipAddress()
+ * @method static string[]          ipsAddress()
+ * @method static string            kernel()
+ * @method static ?string           macAddress()
+ * @method static int|string        memoryLimit(bool $format = true)
+ * @method static int|string        memoryUsage(bool $format = true)
+ * @method static string            os()
+ * @method static int               ramCount()
+ * @method static int|string        ramFree(bool $format = true)
+ * @method static array<int|string> ramList(bool $format = true)
+ * @method static int|string        ramTotal(bool $format = true)
+ * @method static int|string        ramUsedPercentage(bool $format = true)
  */
 class Sysinfo
 {
@@ -69,6 +100,13 @@ class Sysinfo
      */
     private $adapter;
 
+    /**
+     * Self instance for singletton
+     * 
+     * @var self
+     */
+    private static $_instance = null;
+
     public function __construct()
     {
         $agent  = PHP_OS;
@@ -86,6 +124,18 @@ class Sysinfo
     }
 
     /**
+     * Singleton method
+     */
+    public static function instance(): self
+    {
+        if (! (self::$_instance instanceof self)) {
+            self::$_instance = new self;
+        }
+
+        return self::$_instance;
+    }
+
+    /**
      * Magic call to adapter methods
      *
      * @return mixed
@@ -97,5 +147,15 @@ class Sysinfo
         }
 
         throw new BadMethodCallException("Method `{$method}` not exist");
+    }
+
+    /**
+     * Magic statical call to adapter methods
+     *
+     * @return mixed
+     */
+    public static function __callStatic(string $method, array $arguments = [])
+    {
+        return self::instance()->__call($method, $arguments);
     }
 }
