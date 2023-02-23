@@ -43,6 +43,7 @@ use Dimtrov\Sysinfo\Adapters\Windows;
  * @method int|string        memoryLimit(bool $format = true)
  * @method int|string        memoryUsage(bool $format = true)
  * @method string            os()
+ * @method string            osRelease()
  * @method int               ramCount()
  * @method int|string        ramFree(bool $format = true)
  * @method array<int|string> ramList(bool $format = true)
@@ -74,6 +75,7 @@ use Dimtrov\Sysinfo\Adapters\Windows;
  * @method static int|string        memoryLimit(bool $format = true)
  * @method static int|string        memoryUsage(bool $format = true)
  * @method static string            os()
+ * @method static string            osRelease()
  * @method static int               ramCount()
  * @method static int|string        ramFree(bool $format = true)
  * @method static array<int|string> ramList(bool $format = true)
@@ -133,6 +135,93 @@ class Sysinfo
         }
 
         return self::$_instance;
+    }
+
+    /**
+     * Get informations about the computer
+     */
+    public static function computer(): array
+    {
+        $adapter = self::instance()->adapter;
+
+        return [
+            'hostname'   => $adapter->hostname(),
+            'ipAddress'  => $adapter->ipAddress(),
+            'ipsAddress' => $adapter->ipsAddress(),
+            'kernel'     => $adapter->kernel(),
+            'macAddress' => $adapter->macAddress(),
+            'os'         => $adapter->os(),
+            'osRelease'  => $adapter->osRelease(),
+        ];
+    }
+
+    /**
+     * Get informations about the CPU
+     */
+    public static function cpu(bool $format = true): array
+    {
+        $adapter = self::instance()->adapter;
+
+        return [
+            'architecture' => $adapter->cpuArchitecture(),
+            'cores'        => $adapter->cpuCores(),
+            'free'         => $adapter->cpuFree(),
+            'frequency'    => $adapter->cpuFrequency($format),
+            'name'         => $adapter->cpuName(),
+            'name'         => $adapter->cpuName(),
+            'processors'   => $adapter->cpuProcessors(),
+            'speed'        => $adapter->cpuSpeed($format),
+            'vendor'       => $adapter->cpuVendor(),
+        ];
+    }
+
+    /**
+     * Get informations about the HARD DISK
+     */
+    public static function disk(bool $format = true, string $partition = '/'): array
+    {
+        $adapter = self::instance()->adapter;
+
+        return [
+            'capacity'         => $adapter->diskCapacity($format),
+            'countPartitions'  => $adapter->diskCountPartitions(),
+            'free'             => $adapter->diskFree($format, $partition),
+            'partitions'       => $adapter->diskPartitions(),
+            'partitionsSpaces' => $adapter->diskPartitionsSpaces($format),
+            'total'            => $adapter->diskTotal($format, $partition),
+            'used'             => $adapter->diskUsed($format, $partition),
+            'usedPercentage'   => $adapter->diskUsedPercentage($format, $partition),
+        ];
+    }
+
+    /**
+     * Get informations about the PHP
+     */
+    public static function php(bool $format = true): array
+    {
+        $adapter = self::instance()->adapter;
+
+        return [
+            'memoryLimit'        => $adapter->memoryLimit($format),
+            'memoryUsage'        => $adapter->memoryUsage($format),
+            'executionTimeLimit' => $adapter->executionTimeLimit(),
+        ];
+    }
+
+    /**
+     * Get informations about the RAM
+     */
+    public static function ram(bool $format = true): array
+    {
+        $adapter = self::instance()->adapter;
+
+        return [
+            'count'          => $adapter->ramCount(),
+            'free'           => $adapter->ramFree($format),
+            'list'           => $adapter->ramList($format),
+            'total'          => $adapter->ramTotal($format),
+            'usedPercentage' => $adapter->ramUsedPercentage($format),
+        ];
     }
 
     /**
