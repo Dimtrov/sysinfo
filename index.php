@@ -8,12 +8,9 @@ use Dimtrov\Sysinfo\Sysinfo;
 
 $sysinfo = new Sysinfo();
 
-$ram = [
-    'total' => $sysinfo->cpuFree(),
-    'speed' => $sysinfo->cpuSpeed(),
-    'basespeed' => $sysinfo->cpuFrequency(),
-
-];
+$info = $sysinfo->all(false, [
+    'onlytotalspace' => false,
+]);
 
 
-echo '<pre>'.print_r($ram, true).'</pre>';
+echo '<pre>'.print_r($info, true).'</pre>';
