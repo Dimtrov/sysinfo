@@ -34,6 +34,7 @@ use Dimtrov\Sysinfo\Adapters\Windows;
  * @method int|string        diskTotal(bool $format = true, string $partition = '/')
  * @method int|string        diskUsed(bool $format = true, string $partition = '/')
  * @method int|string        diskUsedPercentage(bool $format = true, string $partition = '/')
+ * @method int|string        diskUsedPercentage(bool $format = true, string $partition = '/')
  * @method int               executionTimeLimit()
  * @method string            hostname()
  * @method string            ipAddress()
@@ -46,8 +47,10 @@ use Dimtrov\Sysinfo\Adapters\Windows;
  * @method string            osRelease()
  * @method int               ramCount()
  * @method int|string        ramFree(bool $format = true)
+ * @method int|string        ramFreePercentage(bool $format = true)
  * @method array<int|string> ramList(bool $format = true)
  * @method int|string        ramTotal(bool $format = true)
+ * @method int|string        ramUsed(bool $format = true)
  * @method int|string        ramUsedPercentage(bool $format = true)
  * 
  * @method static string            cpuArchitecture()
@@ -61,6 +64,7 @@ use Dimtrov\Sysinfo\Adapters\Windows;
  * @method static int|string        diskCapacity(bool $format = true)
  * @method static int               diskCountPartitions()
  * @method static int|string        diskFree(bool $format = true, string $partition = '/')
+ * @method static int|string        diskFreePercentage(bool $format = true, string $partition = '/')
  * @method static array             diskPartitions()
  * @method static array<string,     int|string> diskPartitionsSpaces(bool $format = true)
  * @method static int|string        diskTotal(bool $format = true, string $partition = '/')
@@ -78,8 +82,10 @@ use Dimtrov\Sysinfo\Adapters\Windows;
  * @method static string            osRelease()
  * @method static int               ramCount()
  * @method static int|string        ramFree(bool $format = true)
+ * @method static int|string        ramFreePercentage(bool $format = true)
  * @method static array<int|string> ramList(bool $format = true)
  * @method static int|string        ramTotal(bool $format = true)
+ * @method static int|string        ramUsed(bool $format = true)
  * @method static int|string        ramUsedPercentage(bool $format = true)
  */
 class Sysinfo
@@ -222,6 +228,7 @@ class Sysinfo
             'capacity'         => $adapter->diskCapacity($format),
             'countPartitions'  => $adapter->diskCountPartitions(),
             'free'             => $adapter->diskFree($format, $partition),
+            'freePercentage'   => $adapter->diskFreePercentage($format, $partition),
             'partitions'       => $adapter->diskPartitions(),
             'partitionsSpaces' => $adapter->diskPartitionsSpaces($format),
             'total'            => $adapter->diskTotal($format, $partition),
@@ -254,8 +261,10 @@ class Sysinfo
         return [
             'count'          => $adapter->ramCount(),
             'free'           => $adapter->ramFree($format),
+            'freePercentage' => $adapter->ramFreePercentage($format),
             'list'           => $adapter->ramList($format),
             'total'          => $adapter->ramTotal($format),
+            'used'           => $adapter->ramUsed($format),
             'usedPercentage' => $adapter->ramUsedPercentage($format),
         ];
     }

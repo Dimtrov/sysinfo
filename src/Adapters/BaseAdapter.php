@@ -122,6 +122,22 @@ abstract class BaseAdapter
     }
 
     /**
+     * Retrieve the free resources from the total resources as a percentage.
+     *
+     * @return int|string if $format set to true, return a string like `'2%'` otherwise, return a raw value in bytes like `2`
+     */
+    public function diskFreePercentage(bool $format = true, string $partition = '/')
+    {
+        $total = $this->diskTotal(false, $partition);
+        $free  = $this->diskFree(false, $partition);
+
+        $percentage = $free / $total * 100;
+
+        return $format ? number_format($percentage, 0, '.', '') . '%' : $percentage;
+    }
+    
+    
+    /**
      * Determine the storage capacity of each partition on the hard drive
      *
      * @return array<int|string> if $format set to true, return an array of string like `['2GB', '4GB']` otherwise, return an array of raw value in bytes like `[2000000, 40000]`
@@ -299,6 +315,18 @@ abstract class BaseAdapter
     }
 
     /**
+     * Retrieve the free rate (as percentage) of the RAM.
+     *
+     * @return int|string if $format set to true, return a string like `'2%'` otherwise, return a raw value in bytes like `2`
+     */
+    public function ramFreePercentage(bool $format = true)
+    {
+        $percentage = $this->ramFree(false) / $this->ramTotal(false) * 100;
+
+        return $format ? number_format($percentage, 0, '.', '') . '%' : $percentage;
+    }
+
+    /**
      * Retrieve the total ram resources.
      *
      * @return int|string if $format set to true, return a string like `'2GB'` otherwise, return a raw value in bytes like `2000000`
@@ -311,13 +339,28 @@ abstract class BaseAdapter
     }
 
     /**
-     * Get the consumption rate (as a percentage) of the RAM
+     * Get the consumption rate of the RAM
      *
      * @return int|string if $format set to true, return a string like `'2GB'` otherwise, return a raw value in bytes like `2000000`
      */
+    public function ramUsed(bool $format = true)
+    {
+        $usage = $this->ramTotal(false) - $this->ramFree(false);
+
+        return $format ? $this->byte2size($usage) : $usage;
+    }
+
+    /**
+     * Get the consumption rate (as a percentage) of the RAM
+     *
+     * @return int|string if $format set to true, return a string like `'2%'` otherwise, return a raw value in bytes like `2`
+     */
     public function ramUsedPercentage(bool $format = true)
     {
-        $percentage = $this->ramFree(false) / $this->ramTotal(false) * 100;
+        $total = $this->ramTotal(false);
+        $free = $this->ramFree(false);
+        
+        $percentage = ($total - $free) / $total * 100;
 
         return $format ? number_format($percentage, 0, '.', '') . '%' : $percentage;
     }
