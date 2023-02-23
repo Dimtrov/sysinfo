@@ -142,12 +142,23 @@ abstract class BaseAdapter
      *
      * @return array<int|string> if $format set to true, return an array of string like `['2GB', '4GB']` otherwise, return an array of raw value in bytes like `[2000000, 40000]`
      */
-    public function diskPartitionsSpaces(bool $format = true): array
+    public function diskPartitionsSpaces(bool $format = true, bool $onlytotalspace = true): array
     {
         $partitions = $this->diskPartitions();
 
         foreach ($partitions as $key => $value) {
-            $partitions[$value] = $this->diskTotal($format, $value);
+            if ($onlytotalspace) {
+                $partitions[$value] = $this->diskTotal($format, $value);
+            }
+            else {
+                $partitions[$value] = [
+                    'free'           => $this->diskFree($format, $value),
+                    'freePercentage' => $this->diskFreePercentage($format, $value),
+                    'total'          => $this->diskTotal($format, $value),
+                    'used'           => $this->diskUsed($format, $value),
+                    'usedPercentage' => $this->diskUsedPercentage($format, $value),
+                ];
+            }
             unset($partitions[$key]);
         }
 
@@ -359,7 +370,7 @@ abstract class BaseAdapter
     {
         $total = $this->ramTotal(false);
         $free = $this->ramFree(false);
-        
+
         $percentage = ($total - $free) / $total * 100;
 
         return $format ? number_format($percentage, 0, '.', '') . '%' : $percentage;

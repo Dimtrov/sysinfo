@@ -30,7 +30,7 @@ use Dimtrov\Sysinfo\Adapters\Windows;
  * @method int               diskCountPartitions()
  * @method int|string        diskFree(bool $format = true, string $partition = '/')
  * @method array             diskPartitions()
- * @method array<string,     int|string> diskPartitionsSpaces(bool $format = true)
+ * @method array<string,     int|string> diskPartitionsSpaces(bool $format = true, bool $onlytotalspace = true)
  * @method int|string        diskTotal(bool $format = true, string $partition = '/')
  * @method int|string        diskUsed(bool $format = true, string $partition = '/')
  * @method int|string        diskUsedPercentage(bool $format = true, string $partition = '/')
@@ -66,7 +66,7 @@ use Dimtrov\Sysinfo\Adapters\Windows;
  * @method static int|string        diskFree(bool $format = true, string $partition = '/')
  * @method static int|string        diskFreePercentage(bool $format = true, string $partition = '/')
  * @method static array             diskPartitions()
- * @method static array<string,     int|string> diskPartitionsSpaces(bool $format = true)
+ * @method static array<string,     int|string> diskPartitionsSpaces(bool $format = true, bool $onlytotalspace = true)
  * @method static int|string        diskTotal(bool $format = true, string $partition = '/')
  * @method static int|string        diskUsed(bool $format = true, string $partition = '/')
  * @method static int|string        diskUsedPercentage(bool $format = true, string $partition = '/')
@@ -149,8 +149,9 @@ class Sysinfo
     public static function all(bool $merge = false, array $options = []): array
     {
         $options = array_merge([
-            'format'    => true,
-            'partition' => '/'
+            'format'         => true,
+            'partition'      => '/',
+            'onlytotalspace' => true
         ], $options);
 
         /**
@@ -159,7 +160,7 @@ class Sysinfo
         $informations = [
             'computer' => self::computer(),
             'cpu'      => self::cpu($options['format']),
-            'disk'     => self::disk($options['format'], $options['partition']),
+            'disk'     => self::disk($options['format'], $options['partition'], $options['onlytotalspace']),
             'php'      => self::php($options['format']),
             'ram'      => self::ram($options['format']),
         ];
@@ -220,7 +221,7 @@ class Sysinfo
     /**
      * Get informations about the HARD DISK
      */
-    public static function disk(bool $format = true, string $partition = '/'): array
+    public static function disk(bool $format = true, string $partition = '/', bool $onlytotalspace = true): array
     {
         $adapter = self::instance()->adapter;
 
@@ -230,7 +231,7 @@ class Sysinfo
             'free'             => $adapter->diskFree($format, $partition),
             'freePercentage'   => $adapter->diskFreePercentage($format, $partition),
             'partitions'       => $adapter->diskPartitions(),
-            'partitionsSpaces' => $adapter->diskPartitionsSpaces($format),
+            'partitionsSpaces' => $adapter->diskPartitionsSpaces($format, $onlytotalspace),
             'total'            => $adapter->diskTotal($format, $partition),
             'used'             => $adapter->diskUsed($format, $partition),
             'usedPercentage'   => $adapter->diskUsedPercentage($format, $partition),
