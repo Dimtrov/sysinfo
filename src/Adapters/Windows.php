@@ -52,7 +52,7 @@ class Windows extends BaseAdapter
     {
         $cpu = shell_exec('wmic cpu get Name');
 
-        return str_ireplace('Name ', '', $cpu);
+        return trim(str_ireplace('Name ', '', $cpu));
     }
 
     /**
@@ -84,7 +84,7 @@ class Windows extends BaseAdapter
     {
         $cpu = shell_exec('wmic cpu get Manufacturer');
 
-        return str_ireplace('Manufacturer ', '', $cpu);
+        return trim(str_ireplace('Manufacturer ', '', $cpu));
     }
 
     /**
@@ -135,7 +135,7 @@ class Windows extends BaseAdapter
 
         return null;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -143,7 +143,7 @@ class Windows extends BaseAdapter
     {
         $wmic = explode(PHP_EOL, shell_exec('wmic OS get Caption'));
 
-        return $wmic[1] ?? null;
+        return trim($wmic[1] ?? '');
     }
 
     /**
