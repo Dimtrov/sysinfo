@@ -138,6 +138,42 @@ class Sysinfo
     }
 
     /**
+     * Get informations grouped by category
+     */
+    public static function all(bool $merge = false, array $options = []): array
+    {
+        $options = array_merge([
+            'format'    => true,
+            'partition' => '/'
+        ], $options);
+
+        /**
+         * @var array<string, array<string, string|int|null|string[]>>
+         */
+        $informations = [
+            'computer' => self::computer(),
+            'cpu'      => self::cpu($options['format']),
+            'disk'     => self::disk($options['format'], $options['partition']),
+            'php'      => self::php($options['format']),
+            'ram'      => self::ram($options['format']),
+        ];
+
+        if (! $merge) {
+            return $informations;
+        }
+
+        $items = [];
+
+        foreach ($informations as $key => $values) {
+            foreach ($values as $k => $v) {
+                $items[$key . ucfirst($k)] = $v;
+            }
+        }
+
+        return $items;
+    }
+
+    /**
      * Get informations about the computer
      */
     public static function computer(): array
